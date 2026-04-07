@@ -735,6 +735,165 @@ a {
   animation-delay: -5s;
 }
 
+.proof-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.84fr) minmax(0, 1.16fr);
+  gap: 28px;
+  padding: 36px;
+  border-radius: 38px;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 209, 91, 0.2), transparent 18%),
+    radial-gradient(circle at 86% 14%, rgba(81, 131, 185, 0.16), transparent 20%),
+    linear-gradient(135deg, #0b1724, #112033 46%, #16293d 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 34px 84px rgba(13, 26, 41, 0.2);
+  overflow: hidden;
+  isolation: isolate;
+  align-items: stretch;
+}
+
+.section.proof-stage {
+  padding-top: 36px;
+  margin-top: 74px;
+}
+
+.proof-stage::before,
+.proof-stage::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.proof-stage::before {
+  inset: 0;
+  background:
+    linear-gradient(130deg, rgba(255, 255, 255, 0.08), transparent 32%),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: auto, 84px 84px, 84px 84px;
+}
+
+.proof-stage::after {
+  right: -80px;
+  bottom: -120px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 209, 91, 0.18), transparent 70%);
+  filter: blur(10px);
+}
+
+.proof-copy,
+.proof-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.proof-copy {
+  align-self: center;
+}
+
+.proof-copy .eyebrow {
+  color: var(--gold-soft);
+}
+
+.proof-copy h2 {
+  margin: 0;
+  max-width: 10ch;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(3rem, 4.8vw, 4.6rem);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  color: #fff9ef;
+}
+
+.proof-copy .section-copy {
+  max-width: 46ch;
+  color: rgba(255, 249, 239, 0.74);
+}
+
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-self: stretch;
+}
+
+.proof-card {
+  position: relative;
+  min-height: 188px;
+  padding: 22px 22px 20px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 42px rgba(4, 11, 18, 0.18);
+  backdrop-filter: blur(12px);
+  transition:
+    transform 320ms ease,
+    background 320ms ease,
+    border-color 320ms ease,
+    box-shadow 320ms ease;
+}
+
+.proof-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.12), transparent 34%);
+  pointer-events: none;
+}
+
+.proof-card::after {
+  content: "";
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 209, 91, 0.1), rgba(255, 209, 91, 0.8), rgba(255, 209, 91, 0.1));
+  transform: scaleX(0.24);
+  transform-origin: left;
+  transition: transform 320ms ease;
+}
+
+.proof-card.is-active,
+.proof-card:hover {
+  transform: translateY(-6px);
+  background: linear-gradient(180deg, rgba(22, 37, 53, 0.92), rgba(17, 31, 45, 0.92));
+  border-color: rgba(255, 209, 91, 0.28);
+  box-shadow:
+    0 28px 60px rgba(4, 11, 18, 0.28),
+    0 0 0 1px rgba(255, 209, 91, 0.12);
+}
+
+.proof-card.is-active::after,
+.proof-card:hover::after {
+  transform: scaleX(1);
+}
+
+.proof-index {
+  display: inline-flex;
+  margin-bottom: 18px;
+  color: var(--gold-soft);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.proof-card strong {
+  display: block;
+  margin-bottom: 10px;
+  color: #fff9ef;
+  font-size: 1.12rem;
+}
+
+.proof-card p {
+  margin: 0;
+  color: rgba(255, 249, 239, 0.72);
+  line-height: 1.72;
+}
+
 .section {
   padding-top: 110px;
   position: relative;
@@ -1571,6 +1730,21 @@ a {
   align-items: stretch;
 }
 
+.contact-summary-section {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  padding-top: 0;
+  margin-top: 72px;
+}
+
+.contact-summary-section::before {
+  display: none;
+}
+
+.contact-card-wide {
+  grid-column: 1 / -1;
+}
+
 .contact-card h3 a {
   color: var(--navy);
 }
@@ -1787,6 +1961,7 @@ button:focus-visible {
 
 @media (max-width: 1180px) {
   .hero-home,
+  .proof-stage,
   .two-column-grid,
   .split-section,
   .dark-band-inner,
@@ -1804,6 +1979,10 @@ button:focus-visible {
 
   .about-overview-grid,
   .route-insight-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .proof-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1941,6 +2120,20 @@ button:focus-visible {
 
   .marquee-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .proof-stage {
+    padding: 28px 22px 24px;
+    border-radius: 30px;
+  }
+
+  .proof-copy h2 {
+    max-width: none;
+    font-size: clamp(2.6rem, 10vw, 4rem);
+  }
+
+  .proof-card {
+    min-height: auto;
   }
 
   .cta-panel {

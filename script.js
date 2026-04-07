@@ -110,6 +110,74 @@ if (!reducedMotionQuery.matches) {
   });
 }
 
+const signalRotators = document.querySelectorAll("[data-signal-rotator]");
+
+if (!reducedMotionQuery.matches && signalRotators.length) {
+  signalRotators.forEach((rotator) => {
+    const cards = Array.from(rotator.querySelectorAll("[data-signal-card]"));
+
+    if (cards.length < 2) {
+      return;
+    }
+
+    let activeIndex = Math.max(
+      cards.findIndex((card) => card.classList.contains("is-active")),
+      0
+    );
+    let intervalId = null;
+
+    const setActiveCard = (index) => {
+      cards.forEach((card, cardIndex) => {
+        card.classList.toggle("is-active", cardIndex === index);
+      });
+    };
+
+    const startRotation = () => {
+      if (intervalId) {
+        return;
+      }
+
+      intervalId = window.setInterval(() => {
+        activeIndex = (activeIndex + 1) % cards.length;
+        setActiveCard(activeIndex);
+      }, 2400);
+    };
+
+    const stopRotation = () => {
+      if (!intervalId) {
+        return;
+      }
+
+      window.clearInterval(intervalId);
+      intervalId = null;
+    };
+
+    setActiveCard(activeIndex);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            startRotation();
+          } else {
+            stopRotation();
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    observer.observe(rotator);
+
+    cards.forEach((card, index) => {
+      card.addEventListener("pointerenter", () => {
+        activeIndex = index;
+        setActiveCard(activeIndex);
+      });
+    });
+  });
+}
+
 const timelineRoad = document.querySelector(".timeline-road");
 const timelineMachine = document.querySelector(".timeline-machine");
 const timelineStops = document.querySelectorAll(".timeline-stop[data-stop]");
