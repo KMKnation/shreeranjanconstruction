@@ -2,12 +2,22 @@ const revealItems = document.querySelectorAll(".reveal");
 const statNumbers = document.querySelectorAll(".stat-number");
 const navToggle = document.querySelector(".nav-toggle");
 const siteHeader = document.querySelector(".site-header");
+const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 if (navToggle && siteHeader) {
   navToggle.addEventListener("click", () => {
     const isOpen = siteHeader.classList.toggle("is-open");
     navToggle.setAttribute("aria-expanded", String(isOpen));
   });
+}
+
+if (siteHeader) {
+  const syncHeaderState = () => {
+    siteHeader.classList.toggle("is-scrolled", window.scrollY > 18);
+  };
+
+  syncHeaderState();
+  window.addEventListener("scroll", syncHeaderState, { passive: true });
 }
 
 const revealObserver = new IntersectionObserver(
@@ -66,6 +76,40 @@ const statObserver = new IntersectionObserver(
 
 statNumbers.forEach((stat) => statObserver.observe(stat));
 
+const interactiveCards = document.querySelectorAll(
+  ".glass-card, .stat-grid article, .feature-card, .service-panel, .service-category, .reference-card, .matrix-card, .leader-card, .contact-card, .overview-panel, .cta-panel"
+);
+
+if (!reducedMotionQuery.matches) {
+  const canTilt = () => window.innerWidth > 1024;
+
+  interactiveCards.forEach((card) => {
+    card.classList.add("interactive-card");
+
+    card.addEventListener("pointermove", (event) => {
+      if (!canTilt()) {
+        return;
+      }
+
+      const rect = card.getBoundingClientRect();
+      const relativeX = (event.clientX - rect.left) / rect.width;
+      const relativeY = (event.clientY - rect.top) / rect.height;
+      const tiltY = (relativeX - 0.5) * 8;
+      const tiltX = (0.5 - relativeY) * 8;
+
+      card.style.setProperty("--tilt-x", `${tiltX.toFixed(2)}deg`);
+      card.style.setProperty("--tilt-y", `${tiltY.toFixed(2)}deg`);
+      card.classList.add("is-tilting");
+    });
+
+    card.addEventListener("pointerleave", () => {
+      card.style.setProperty("--tilt-x", "0deg");
+      card.style.setProperty("--tilt-y", "0deg");
+      card.classList.remove("is-tilting");
+    });
+  });
+}
+
 const timelineRoad = document.querySelector(".timeline-road");
 const timelineMachine = document.querySelector(".timeline-machine");
 const timelineStops = document.querySelectorAll(".timeline-stop[data-stop]");
@@ -73,14 +117,12 @@ const roadGuide = document.querySelector(".road-guide");
 
 if (timelineRoad && timelineMachine && timelineStops.length >= 2 && roadGuide) {
   const desktopStops = [0.06, 0.46, 0.9];
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  );
+  const prefersReducedMotion = reducedMotionQuery;
 
   const mobileStops = [
-    { x: 22, y: 18 },
-    { x: 22, y: 18 },
-    { x: 22, y: 18 },
+    { x: 26, y: 112 },
+    { x: 26, y: 112 },
+    { x: 26, y: 112 },
   ];
 
   let activeIndex = 0;
